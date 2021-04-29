@@ -15,8 +15,9 @@ const IndexPage: React.FC<PageProps> = () => {
           node {
             id
             frontmatter {
-              title
               slug
+              title
+              tags
             }
           }
         }
