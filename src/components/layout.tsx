@@ -20,7 +20,7 @@ const Layout: React.FC = ({ children }) => {
     <>
       <CssBaseline />
       <Header siteTitle={data.site.siteMetadata?.title || `Title`} />
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <main>{children}</main>
       </Container>
     </>

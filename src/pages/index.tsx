@@ -1,29 +1,41 @@
 import * as React from "react"
-import { PageProps, Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import { useStaticQuery, graphql, PageProps } from "gatsby"
+import List from "@material-ui/core/List"
+import ListItem from "@material-ui/core/ListItem"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import PostCard from "../components/post-card"
 
-const IndexPage: React.FC<PageProps> = () => (
-  <Layout>
-    <Seo title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <StaticImage
-      src="../images/gatsby-astronaut.png"
-      width={300}
-      quality={95}
-      formats={["auto", "webp", "avif"]}
-      alt="A Gatsby astronaut"
-      style={{ marginBottom: `1.45rem` }}
-    />
-    <p>
-      <Link to="/page-2/">Go to page 2</Link> <br />
-      <Link to="/using-typescript/">Go to "Using TypeScript"</Link>
-    </p>
-  </Layout>
-)
+const IndexPage: React.FC<PageProps> = () => {
+  const data = useStaticQuery(graphql`
+    query Posts {
+      allMarkdownRemark {
+        edges {
+          node {
+            id
+            frontmatter {
+              title
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+
+  return (
+    <Layout>
+      <Seo title="Home" />
+      <List>
+        {data.allMarkdownRemark.edges.map((edge: any) => (
+          <ListItem key={edge.node.id} disableGutters>
+            <PostCard frontmatter={edge.node.frontmatter} />
+          </ListItem>
+        ))}
+      </List>
+    </Layout>
+  )
+}
 
 export default IndexPage
