@@ -13,7 +13,6 @@ const IndexPage: React.FC<PageProps> = () => {
       allMarkdownRemark {
         edges {
           node {
-            id
             frontmatter {
               slug
               title
@@ -31,7 +30,7 @@ const IndexPage: React.FC<PageProps> = () => {
       <Seo title="Home" />
       <List>
         {data.allMarkdownRemark.edges.map((edge: any) => (
-          <ListItem key={edge.node.id} disableGutters>
+          <ListItem key={edge.node.frontmatter.slug} disableGutters>
             <PostCard frontmatter={edge.node.frontmatter} />
           </ListItem>
         ))}
