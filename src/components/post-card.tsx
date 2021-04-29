@@ -12,8 +12,9 @@ import Link from "./link"
 
 interface Props {
   frontmatter: {
-    title: string
     slug: string
+    title: string
+    subtitle: string
     tags: string[]
   }
 }
@@ -35,8 +36,7 @@ const PostCard: React.FC<Props> = ({ frontmatter }) => {
               {frontmatter.title}
             </Typography>
             <Typography gutterBottom variant="body2" color="textSecondary">
-              이 글은 무엇무엇을 이해하는데 도움이 되고 이럴 경우 어떻게하면
-              좋을까 고민한 글입니다.
+              {frontmatter.subtitle}
             </Typography>
             {frontmatter.tags.map(tag => (
               <Chip className={classes.chip} label={tag} />

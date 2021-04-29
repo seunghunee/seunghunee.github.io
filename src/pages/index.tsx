@@ -17,6 +17,7 @@ const IndexPage: React.FC<PageProps> = () => {
             frontmatter {
               slug
               title
+              subtitle
               tags
             }
           }
