@@ -1,5 +1,6 @@
 import * as React from "react"
 import { PageProps, graphql } from "gatsby"
+import "prismjs/themes/prism-tomorrow.css"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
