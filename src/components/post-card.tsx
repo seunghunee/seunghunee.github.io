@@ -22,7 +22,12 @@ interface Props {
 const PostCard: React.FC<Props> = ({ frontmatter }) => {
   const classes = useStyles()
   return (
-    <CardActionArea component={Link} to={frontmatter.slug}>
+    <CardActionArea
+      component={Link}
+      to={frontmatter.slug}
+      disableTouchRipple
+      disableRipple
+    >
       <Card className={classes.card} elevation={0}>
         <Hidden xsDown>
           <CardMedia
