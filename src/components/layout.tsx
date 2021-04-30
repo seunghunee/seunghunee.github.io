@@ -19,19 +19,22 @@ const Layout: React.FC = ({ children }) => {
 
   const classes = useStyles()
   return (
-    <>
+    <div className={classes.background}>
       <CssBaseline />
       <Header siteTitle={data.site.siteMetadata.title} />
       <Container className={classes.main} maxWidth="md">
         <main>{children}</main>
       </Container>
-    </>
+    </div>
   )
 }
 
 export default Layout
 
 const useStyles = makeStyles(theme => ({
+  background: {
+    backgroundColor: "#fff",
+  },
   main: {
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(6),
