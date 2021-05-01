@@ -14,7 +14,7 @@ interface Props {
   frontmatter: {
     slug: string
     title: string
-    subtitle: string
+    description: string
     tags: string[]
   }
 }
@@ -41,7 +41,7 @@ const PostCard: React.FC<Props> = ({ frontmatter }) => {
               {frontmatter.title}
             </Typography>
             <Typography gutterBottom variant="body2" color="textSecondary">
-              {frontmatter.subtitle}
+              {frontmatter.description}
             </Typography>
             {frontmatter.tags.map(tag => (
               <Chip className={classes.chip} label={tag} />

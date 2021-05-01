@@ -14,7 +14,7 @@ interface DataProps {
         frontmatter: {
           slug: string
           title: string
-          subtitle: string
+          description: string
           tags: string[]
         }
       }
@@ -45,7 +45,7 @@ export const query = graphql`
           frontmatter {
             slug
             title
-            subtitle
+            description
             tags
           }
         }
