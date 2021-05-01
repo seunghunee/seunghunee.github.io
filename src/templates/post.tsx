@@ -12,19 +12,19 @@ interface DataProps {
     html: string
     frontmatter: {
       title: string
+      description: string
     }
   }
 }
 
 const Post: React.FC<PageProps<DataProps>> = ({ data }) => {
+  const { title, description } = data.markdownRemark.frontmatter
   const classes = useStyles()
   return (
     <Layout>
-      <Seo title="Using TypeScript" />
+      <Seo title={title} description={description} />
       <div className={classes.post}>
-        <Typography className={classes.title}>
-          {data.markdownRemark.frontmatter.title}
-        </Typography>
+        <Typography className={classes.title}>{title}</Typography>
         <div
           className={classes.body}
           dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
@@ -42,6 +42,7 @@ export const query = graphql`
       html
       frontmatter {
         title
+        description
       }
     }
   }
