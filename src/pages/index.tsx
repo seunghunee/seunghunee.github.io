@@ -24,11 +24,11 @@ interface DataProps {
 
 const IndexPage: React.FC<PageProps<DataProps>> = ({ data }) => (
   <Layout>
-    <Seo title="Home" />
+    <Seo />
     <List>
-      {data.allMarkdownRemark.edges.map((edge: any) => (
-        <ListItem key={edge.node.frontmatter.slug} disableGutters>
-          <PostCard frontmatter={edge.node.frontmatter} />
+      {data.allMarkdownRemark.edges.map(({ node: { frontmatter } }) => (
+        <ListItem key={frontmatter.slug} disableGutters>
+          <PostCard frontmatter={frontmatter} />
         </ListItem>
       ))}
     </List>
