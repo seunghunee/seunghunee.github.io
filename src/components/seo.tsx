@@ -12,7 +12,7 @@ interface Props {
 const Seo: React.FC<Props> = ({
   title,
   description,
-  lang = "en",
+  lang = "ko",
   meta = [],
 }) => {
   const { site } = useStaticQuery(
