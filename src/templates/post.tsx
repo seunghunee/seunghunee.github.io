@@ -82,6 +82,8 @@ const useStyles = makeStyles(theme => ({
       borderRadius: "0.4em",
     },
     "& code.language-text": {
+      color: "#444",
+      backgroundColor: "#EEE",
       padding: ".2em",
     },
     "& h1": {
