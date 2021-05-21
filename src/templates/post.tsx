@@ -69,11 +69,7 @@ const useStyles = makeStyles(theme => ({
   body: {
     color: "#222",
     "& a": {
-      textDecoration: "none",
       color: "#00B6D0",
-    },
-    "& a:hover": {
-      textDecoration: "underline",
     },
     "& img": {
       width: "100%",
