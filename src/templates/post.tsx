@@ -2,7 +2,6 @@ import * as React from "react"
 import { PageProps, graphql } from "gatsby"
 import "prismjs/themes/prism-tomorrow.css"
 import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
@@ -24,7 +23,6 @@ const Post: React.FC<PageProps<DataProps>> = ({ data }) => {
     <Layout>
       <Seo title={title} description={description} />
       <div className={classes.post}>
-        <Typography className={classes.title}>{title}</Typography>
         <div
           className={classes.body}
           dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
@@ -55,17 +53,6 @@ const useStyles = makeStyles(theme => ({
       margin: "auto",
     },
   },
-  title: {
-    color: "#111",
-    marginBottom: theme.spacing(4),
-    fontWeight: "bold",
-    [theme.breakpoints.up("xs")]: {
-      fontSize: "3rem",
-    },
-    [theme.breakpoints.down("xs")]: {
-      fontSize: "2.5rem",
-    },
-  },
   body: {
     color: "#222",
     "& a": {
@@ -83,52 +70,28 @@ const useStyles = makeStyles(theme => ({
       padding: ".2em",
     },
     "& h1": {
-      marginTop: theme.spacing(6),
       [theme.breakpoints.up("xs")]: {
-        fontSize: "2.5rem",
-      },
-      [theme.breakpoints.down("xs")]: {
-        fontSize: "2.25rem",
-      },
-    },
-    "& h2": {
-      [theme.breakpoints.up("xs")]: {
-        fontSize: "2.25rem",
+        fontSize: "3rem",
       },
       [theme.breakpoints.down("xs")]: {
         fontSize: "2rem",
+      },
+    },
+    "& h2": {
+      marginTop: theme.spacing(6),
+      [theme.breakpoints.up("xs")]: {
+        fontSize: "2rem",
+      },
+      [theme.breakpoints.down("xs")]: {
+        fontSize: "1.5rem",
       },
     },
     "& h3": {
       [theme.breakpoints.up("xs")]: {
-        fontSize: "2rem",
-      },
-      [theme.breakpoints.down("xs")]: {
-        fontSize: "1.7rem",
-      },
-    },
-    "& h4": {
-      [theme.breakpoints.up("xs")]: {
-        fontSize: "1.7rem",
-      },
-      [theme.breakpoints.down("xs")]: {
-        fontSize: "1.5rem",
-      },
-    },
-    "& h5": {
-      [theme.breakpoints.up("xs")]: {
         fontSize: "1.5rem",
       },
       [theme.breakpoints.down("xs")]: {
         fontSize: "1.3rem",
-      },
-    },
-    "& h6": {
-      [theme.breakpoints.up("xs")]: {
-        fontSize: "1.3rem",
-      },
-      [theme.breakpoints.down("xs")]: {
-        fontSize: "1.5rem",
       },
     },
     "& p": {
