@@ -56,60 +56,66 @@ say(&a) // error: `a` does not live long enough
 전자의 `'static` 수명은 위에서 설명한대로 프로그램이 끝날 때까지 유효한 참조라는 의미를 지니고 있고, 단순하고 이해하기 쉽다.
 이제부턴 혼란의 여지가 있는 후자의 `'static` 수명제약에 대해 자세히 알아본다.
 
-## `'static` 수명제약
+## 온전한 소유
 
-`<T: 'static>` 는, "**`T` 안의 모든 참조들의 수명은 `'static` 이다**"라는 것을 나타낸다.
-예를들어 다음과 같이 `'static` 수명제약이 걸린 타입의 매개변수에 `'static` 수명을 가지는 참조를 대입할 수 있다.
+`<T: 'static>`에서 `T`는, `'static` 수명제약이 붙어 **모든 참조들의 수명이 `'static`인 타입**으로 제한된다.
+예를들어 앞의 예제에서 설명한 `say`함수의 매개변수에는 다음과 같이 `'static` 수명의 참조를 인수로 대입할 수 있다.
 
 ```rust
 let hello: &'static str = "안녕";
-say(hello); // Ok
+say(hello); // ok
 ```
 
-왜냐하면 매개변수에 대입되는 인수 `hello` 는 문자열을 가리키는 단하나의 참조를 가지고,
-그 참조의 수명은 `'static` 이기 때문이다.
-하지만, 수명이 `'static` 이 아닌 참조들은 대입할 수 없다.
+하지만, 수명이 `'static`이 아닌 참조는 대입할 수 없다.
 
 ```rust
 let hello: &'static str = "안녕";
 let hell = &hello;
-say(hell); // `hell` does not live long enough
+say(hell); // error: `hello` does not live long enough
 ```
 
-변수 `hell` 이 담고 있는 참조의 수명은, `hello` 의 수명이 다할 때까지로 `'static` 이 아니기 때문이다.
-게다가 이런 참조들이 구조체나 배열같은 복합타입(Compound Type)에 숨어 있더라도 Rust는 찾아낸다!
+헷갈릴 수도 있는데 변수 `hello`에 담긴 참조는 수명이 `'static`이지만,
+`hell`에 담긴 참조(`&hello`)는 수명이 `'static`이 아니다.
+수명이 `'static'`인 참조만 대입할 수 있고 아니면 대입할 수 없으니까
+여기까지만 보면 `'static'` 수명이랑 다를게 없어보인다.
+
+그런데 이런게 컴파일되고 만다!
+
+```rust
+let s = "hello".to_string();
+say(s); // ok
+```
+
+`s`는 문자열 슬라이스 참조(`&str`)가 아닌 문자열(`String`)을 담고 있다.
+`'static` 수명제약은 **모든 참조들의 수명이 `'static`인 타입**으로 제한하지만,
+애초에 `String`은 참조가 아닌 **소유타입(owned type)**[^1]이기 때문에
+`'static` 수명제약이 걸린 타입의 매개변수에도 대입할 수 있다.
+당연하지만 같은 이유로 `Vec`나 다른 소유타입의 값들도 대입할 수 있다.
+
+그럼 참조를 포함하는 타입은 어떨까?
 
 ```rust
 let hello: &'static str = "안녕";
 let hell = &hello;
-let s = S(1, hell); // struct S<'a>(i32, &'a &'static str);
-say(s); // `hell` does not live long enough
+let s = S(1, hello, hell); // struct S<'a>(i32, &'static str, &'a &'static str);
+say(s); // error: `hello` does not live long enough
 ```
 
-`s` 안의 참조 `hell` 의 수명이 `'static` 이 아니기 때문에 컴파일에 실패한다.
-이렇게 `'static` 수명제약을 이용하면 `'static` 수명의 참조 이외의 빌린(Borrowing) 값들을 거를 수 있다.
-그럼 참조가 아예 없는 복합타입은?
+`s`안에 있는 참조는 2개 있다.
+`hello`가 담고있는 참조의 수명은 `'static`으로 문제가 없지만
+`hell`이 담고있는 참조의 수명이 `'static`이 아니기 때문에 컴파일에 실패한다.
+참조를 아무리 많이 포함하고 있어도 모두 `'static` 수명이면 문제없이 `say`함수에 대입할 수 있지만,
+단 하나라도 `'static` 수명이 아닌 참조가 있다면 대입할 수 없게 된다.
+이렇게 `'static` 수명제약을 이용하면 `'static` 수명이 아닌 참조를 거를 수 있다.
 
-```rust
-let s = S(1, 2); // struct S(i32, i32)
-say(s); // Ok
-```
-
-문제없이 컴파일 된다.
-즉, `'static` 수명제약이 걸린 타입의 매개변수에는
-`Vec` 나 `String` 같이 **소유타입(owned type)의 값들도** 대입할 수 있다![^1]
-
-```rust
-let really = "정말?".to_string();
-say(really); // Ok
-```
-
-`Vec` 나 `String` 은 프로그램 도중 언제든지 메모리에서 해제될 수 있기 때문에,
-`'static` 수명이 의미하는 "프로그램이 끝날 때까지 항상 유효하다"는
+정리하면 어느 타입 매개변수 `T`에 `'static` 수명제약을 가한다는 말은,
+`T`를 빌린(Borrowed)값을 가지고 있지 않은(가지고 있더라고 수명이 `'static`인)
+**온전히 소유(Owned)할 수 있는 타입**으로 제한하는 것이라고 말할 수 있다.
+또한 `Vec`나 `String`같은 소유타입은 프로그램 도중 언제든지 메모리에서 해제될 수 있기 때문에,
+`'static` 수명이 의미하는 "프로그램이 끝날 때까지 항상 유효한 참조"라는 것은
 `'static` 수명제약이 의미하는 바와 다르다는 것을 알 수 있다.
-`'static` 수명제약은 "**온전히 소유할 수 있다**"를 의미한다고 할 수 있다.
 
-그럼 이 의미가 어떨 때 유용하게 쓰일까?
+그럼 이 온전히 소유한다는 의미가 어떨 때 유용하게 쓰일까?
 
 ## `'static` 수명제약의 쓰임새
 
