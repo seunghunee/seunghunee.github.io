@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-pages-index-tsx",
+    "path": "/",
+    "result": {"data":{"allMarkdownRemark":{"edges":[{"node":{"frontmatter":{"slug":"/Rust-static 수명의-2가지-의미","title":"Rust static 수명의 2가지 의미","description":"Rust에서 'static 수명의 2가지 의미와 수명제약(lifetime bound)에 대해","tags":["Rust","Ownership","Lifetime bound"]}}}]}},"pageContext":{}},
+    "staticQueryHashes": ["3649515864","63159454"]}
