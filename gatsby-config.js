@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
     title: `신세상`,
-    description: `컴퓨터기술에 대한 잡다한 정보와 내 생각을 글로...`,
+    description: `컴퓨터기술과 관련된 여러 정보와 생각을 글로 정리하는 곳`,
     author: `@HelloSeunghun`,
   },
   plugins: [
