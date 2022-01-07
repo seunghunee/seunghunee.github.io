@@ -1,11 +1,9 @@
 import * as React from "react"
 import Card from "@material-ui/core/Card"
 import CardActionArea from "@material-ui/core/CardActionArea"
-import CardMedia from "@material-ui/core/CardMedia"
 import CardContent from "@material-ui/core/CardContent"
 import Typography from "@material-ui/core/Typography"
 import { makeStyles } from "@material-ui/core/styles"
-import Hidden from "@material-ui/core/Hidden"
 import Chip from "@material-ui/core/Chip"
 
 import Link from "./link"
@@ -23,18 +21,13 @@ const PostCard: React.FC<Props> = ({ frontmatter }) => {
   const classes = useStyles()
   return (
     <CardActionArea
+      className={classes.cardActionArea}
       component={Link}
       to={frontmatter.slug}
       disableTouchRipple
       disableRipple
     >
       <Card className={classes.card} elevation={0}>
-        <Hidden xsDown>
-          <CardMedia
-            className={classes.cardMedia}
-            image="https://source.unsplash.com/random"
-          />
-        </Hidden>
         <div className={classes.content}>
           <CardContent>
             <Typography gutterBottom variant="h5">
@@ -56,6 +49,10 @@ const PostCard: React.FC<Props> = ({ frontmatter }) => {
 export default PostCard
 
 const useStyles = makeStyles(theme => ({
+  cardActionArea: {
+    width: 680,
+    margin: "auto",
+  },
   card: {
     display: "flex",
   },
@@ -64,9 +61,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up("md")]: {
       margin: theme.spacing(1),
     },
-  },
-  cardMedia: {
-    width: theme.spacing(20),
   },
   chip: {
     margin: theme.spacing(0.5),
