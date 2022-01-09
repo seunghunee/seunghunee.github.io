@@ -6,6 +6,7 @@
   "author": "Shin Seunghun <seunghunee@gmail.com>",
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "gatsby": "^4.4.0",
     "gatsby-plugin-image": "^1.2.1",
     "gatsby-plugin-manifest": "^3.2.0",
