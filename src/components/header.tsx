@@ -3,6 +3,10 @@ import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
+import Box from "@material-ui/core/Box"
+import GitHubIcon from "@material-ui/icons/GitHub"
+import IconButton from "@material-ui/core/IconButton"
+import Tooltip from "@material-ui/core/Tooltip"
 
 import Link from "./link"
 
@@ -13,19 +17,29 @@ interface Props {
 const Header: React.FC<Props> = ({ siteTitle }) => {
   const classes = useStyles()
   return (
-    <AppBar
-      position="relative"
-      elevation={0}
-      style={{
-        background: "linear-gradient(45deg, #00C9B7 30%, #00B6D0 90%)",
-      }}
-    >
-      <Toolbar>
-        <Link to="/">
-          <Typography className={classes.siteTitle}>{siteTitle}</Typography>
-        </Link>
-      </Toolbar>
-    </AppBar>
+    <Box style={{ flexGrow: 1 }}>
+      <AppBar
+        position="relative"
+        elevation={0}
+        style={{
+          background: "linear-gradient(45deg, #00C9B7 30%, #00B6D0 90%)",
+        }}
+      >
+        <Toolbar>
+          <Link to="/" style={{ flexGrow: 1 }}>
+            <Typography className={classes.siteTitle}>{siteTitle}</Typography>
+          </Link>
+          <Tooltip title="GitHub">
+            <IconButton
+              onClick={() => open("https://github.com/seunghunee", "_blank")}
+              color="inherit"
+            >
+              <GitHubIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </AppBar>
+    </Box>
   )
 }
 
