@@ -15,7 +15,7 @@ tags: ["Go", "Goroutine", "WaitGroup", "Concurrency"]
 `WaitGroup`의 내부에선 기다릴 특정 고루틴의 개수를 저장하고 있다.
 기다리고 싶은 고루틴을 생성할 때마다 `WaitGroup`의 [`Add`](https://pkg.go.dev/sync#WaitGroup.Add)메서드를 호출해서 기다릴 고루틴의 수를 늘리고,
 반대로 고루틴이 종료되면 [`Done`](https://pkg.go.dev/sync#WaitGroup.Done)메서드를 호출해서 그 수를 줄이는 방식으로 사용한다.
-메인 고루틴에서는 [`Wait`](https://pkg.go.dev/sync#WaitGroup.Wait)메서드를 호출해 모든 고루틴이 종료되어 내부의 대기 고루틴의 수가 0이 될 때까지 기대리 게 할 수 있다.
+메인 고루틴에서는 [`Wait`](https://pkg.go.dev/sync#WaitGroup.Wait)메서드를 호출해 모든 고루틴이 종료되어 내부의 대기 고루틴의 수가 0이 될 때까지 기다리게 할 수 있다.
 
 쉽고 간단한 방법이지만 병행 프로그래밍(concurrent programming)에서 실수하기 쉬워 주의가 필요하다.
 
