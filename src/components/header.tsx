@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import Box from "@material-ui/core/Box"
 import GitHubIcon from "@material-ui/icons/GitHub"
+import LinkedInIcon from "@material-ui/icons/LinkedIn"
 import IconButton from "@material-ui/core/IconButton"
 import Tooltip from "@material-ui/core/Tooltip"
 
@@ -29,6 +30,19 @@ const Header: React.FC<Props> = ({ siteTitle }) => {
           <Link to="/" style={{ flexGrow: 1 }}>
             <Typography className={classes.siteTitle}>{siteTitle}</Typography>
           </Link>
+          <Tooltip title="LinkedIn">
+            <IconButton
+              onClick={() =>
+                open(
+                  "https://www.linkedin.com/in/shin-seunghun-790172b6/",
+                  "_blank"
+                )
+              }
+              color="inherit"
+            >
+              <LinkedInIcon />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="GitHub">
             <IconButton
               onClick={() => open("https://github.com/seunghunee", "_blank")}
