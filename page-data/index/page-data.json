@@ -1,1 +1,5 @@
-{"componentChunkName":"component---src-pages-index-tsx","path":"/","result":{"data":{"allMarkdownRemark":{"edges":[{"node":{"frontmatter":{"slug":"/'static-수명의-2가지-의미","title":"'static 수명의 2가지 의미","description":"Rust에서 'static 수명의 2가지 의미와 수명제약(lifetime bound)에 대해","tags":["Rust","Ownership","Lifetime bound"]}}},{"node":{"frontmatter":{"slug":"/WaitGroup의-올바른-사용법","title":"WaitGroup의 올바른 사용법","description":"Go의 WaitGroup을 사용할 때 쉽게 실수할 수 있는 부분과 올바른 사용법에 대해","tags":["Go","Goroutine","WaitGroup","Concurrency"]}}}]}},"pageContext":{}},"staticQueryHashes":["3649515864","63159454"]}
+{
+    "componentChunkName": "component---src-pages-index-tsx",
+    "path": "/",
+    "result": {"data":{"allMarkdownRemark":{"edges":[{"node":{"frontmatter":{"slug":"/'static-수명의-2가지-의미","title":"'static 수명의 2가지 의미","description":"Rust에서 'static 수명의 2가지 의미와 수명제약(lifetime bound)에 대해","tags":["Rust","Ownership","Lifetime bound"]}}},{"node":{"frontmatter":{"slug":"/WaitGroup의-올바른-사용법","title":"WaitGroup의 올바른 사용법","description":"Go의 WaitGroup을 사용할 때 쉽게 실수할 수 있는 부분과 올바른 사용법에 대해","tags":["Go","Goroutine","WaitGroup","Concurrency"]}}}]}},"pageContext":{}},
+    "staticQueryHashes": ["3649515864","63159454"]}
