@@ -20,7 +20,7 @@ tags: ["Go", "Goroutine", "WaitGroup", "Concurrency"]
 쉽고 간단한 방법이지만 병행 프로그래밍(concurrent programming)에서 실수하기 쉬워 주의가 필요하다.
 
 ```go
-wg := sync.WaitGroup
+var wg sync.WaitGroup
 for i := 0; i < 10; i++ {
     go func() {
         wg.Add(1) // 대기 고루틴 수 1 증가
@@ -49,7 +49,7 @@ wg.Wait() // 자식 고루틴 10개가 모두 종료될 때까지 대기
 해당 고루틴을 실행하기 직전에 증가**시켜야 한다.
 
 ```go
-wg := sync.WaitGroup
+var wg sync.WaitGroup
 for i := 0; i < 10; i++ {
     wg.Add(1) // 대기 고루틴 수 1 증가
     go func() {
