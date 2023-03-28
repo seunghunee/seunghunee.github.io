@@ -8,7 +8,7 @@
 반대로 고루틴이 종료되면 <a href="https://pkg.go.dev/sync#WaitGroup.Done"><code class="language-text">Done</code></a>메서드를 호출해서 그 수를 줄이는 방식으로 사용한다.
 메인 고루틴에서는 <a href="https://pkg.go.dev/sync#WaitGroup.Wait"><code class="language-text">Wait</code></a>메서드를 호출해 모든 고루틴이 종료되어 내부의 대기 고루틴의 수가 0이 될 때까지 기다리게 할 수 있다.</p>
 <p>쉽고 간단한 방법이지만 병행 프로그래밍(concurrent programming)에서 실수하기 쉬워 주의가 필요하다.</p>
-<div class="gatsby-highlight" data-language="go"><pre class="language-go"><code class="language-go">wg <span class="token operator">:=</span> sync<span class="token punctuation">.</span>WaitGroup
+<div class="gatsby-highlight" data-language="go"><pre class="language-go"><code class="language-go"><span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
 <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
     <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// 대기 고루틴 수 1 증가</span>
@@ -31,7 +31,7 @@ wg<span class="token punctuation">.</span><span class="token function">Wait</spa
 메인 고루틴은 '대기할 고루틴이 없구나'하고 자식 고루틴들을 기다리지 않고 바로 다음 작업을 진행해버리게 된다.</p>
 <p>이 문제를 해결하기 위해선, <strong>언제 스케쥴링돼서 실행될지 모를 고루틴안에서 대기 개수를 증가시키는 게 아니라
 해당 고루틴을 실행하기 직전에 증가</strong>시켜야 한다.</p>
-<div class="gatsby-highlight" data-language="go"><pre class="language-go"><code class="language-go">wg <span class="token operator">:=</span> sync<span class="token punctuation">.</span>WaitGroup
+<div class="gatsby-highlight" data-language="go"><pre class="language-go"><code class="language-go"><span class="token keyword">var</span> wg sync<span class="token punctuation">.</span>WaitGroup
 <span class="token keyword">for</span> i <span class="token operator">:=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span> <span class="token punctuation">{</span>
     wg<span class="token punctuation">.</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token comment">// 대기 고루틴 수 1 증가</span>
     <span class="token keyword">go</span> <span class="token keyword">func</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
