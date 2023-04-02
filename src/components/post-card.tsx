@@ -1,12 +1,43 @@
 import * as React from "react"
-import Card from "@material-ui/core/Card"
-import CardActionArea from "@material-ui/core/CardActionArea"
-import CardContent from "@material-ui/core/CardContent"
-import Typography from "@material-ui/core/Typography"
-import { makeStyles } from "@material-ui/core/styles"
-import Chip from "@material-ui/core/Chip"
+import { styled } from "@mui/material/styles"
+import Card from "@mui/material/Card"
+import CardActionArea from "@mui/material/CardActionArea"
+import CardContent from "@mui/material/CardContent"
+import Typography from "@mui/material/Typography"
+import Chip from "@mui/material/Chip"
 
 import Link from "./link"
+
+const PREFIX = "PostCard"
+
+const classes = {
+  cardActionArea: `${PREFIX}-cardActionArea`,
+  card: `${PREFIX}-card`,
+  content: `${PREFIX}-content`,
+  chip: `${PREFIX}-chip`,
+}
+
+const StyledCardActionArea = styled(CardActionArea)(({ theme }) => ({
+  [`&.${classes.cardActionArea}`]: {
+    width: 680,
+    margin: "auto",
+  },
+
+  [`& .${classes.card}`]: {
+    display: "flex",
+  },
+
+  [`& .${classes.content}`]: {
+    flex: 1,
+    [theme.breakpoints.up("md")]: {
+      margin: theme.spacing(1),
+    },
+  },
+
+  [`& .${classes.chip}`]: {
+    margin: theme.spacing(0.5),
+  },
+}))
 
 interface Props {
   frontmatter: {
@@ -18,9 +49,8 @@ interface Props {
 }
 
 const PostCard: React.FC<Props> = ({ frontmatter }) => {
-  const classes = useStyles()
   return (
-    <CardActionArea
+    <StyledCardActionArea
       className={classes.cardActionArea}
       component={Link}
       to={frontmatter.slug}
@@ -42,27 +72,8 @@ const PostCard: React.FC<Props> = ({ frontmatter }) => {
           </CardContent>
         </div>
       </Card>
-    </CardActionArea>
+    </StyledCardActionArea>
   )
 }
 
 export default PostCard
-
-const useStyles = makeStyles(theme => ({
-  cardActionArea: {
-    width: 680,
-    margin: "auto",
-  },
-  card: {
-    display: "flex",
-  },
-  content: {
-    flex: 1,
-    [theme.breakpoints.up("md")]: {
-      margin: theme.spacing(1),
-    },
-  },
-  chip: {
-    margin: theme.spacing(0.5),
-  },
-}))

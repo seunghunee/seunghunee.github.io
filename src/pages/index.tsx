@@ -1,7 +1,7 @@
 import * as React from "react"
 import { graphql, PageProps } from "gatsby"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"

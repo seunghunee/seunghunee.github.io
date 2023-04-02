@@ -1,24 +1,37 @@
 import * as React from "react"
-import AppBar from "@material-ui/core/AppBar"
-import Toolbar from "@material-ui/core/Toolbar"
-import { makeStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import Box from "@material-ui/core/Box"
-import GitHubIcon from "@material-ui/icons/GitHub"
-import LinkedInIcon from "@material-ui/icons/LinkedIn"
-import IconButton from "@material-ui/core/IconButton"
-import Tooltip from "@material-ui/core/Tooltip"
+import { styled } from "@mui/material/styles"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import Typography from "@mui/material/Typography"
+import Box from "@mui/material/Box"
+import GitHubIcon from "@mui/icons-material/GitHub"
+import LinkedInIcon from "@mui/icons-material/LinkedIn"
+import IconButton from "@mui/material/IconButton"
+import Tooltip from "@mui/material/Tooltip"
 
 import Link from "./link"
+
+const PREFIX = "Header"
+
+const classes = {
+  siteTitle: `${PREFIX}-siteTitle`,
+}
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  [`& .${classes.siteTitle}`]: {
+    color: "#E8F3F1",
+    fontWeight: "bold",
+    fontSize: "1.6em",
+  },
+}))
 
 interface Props {
   siteTitle: string
 }
 
 const Header: React.FC<Props> = ({ siteTitle }) => {
-  const classes = useStyles()
   return (
-    <Box style={{ flexGrow: 1 }}>
+    <StyledBox style={{ flexGrow: 1 }}>
       <AppBar
         position="relative"
         elevation={0}
@@ -53,16 +66,8 @@ const Header: React.FC<Props> = ({ siteTitle }) => {
           </Tooltip>
         </Toolbar>
       </AppBar>
-    </Box>
+    </StyledBox>
   )
 }
 
 export default Header
-
-const useStyles = makeStyles(theme => ({
-  siteTitle: {
-    color: "#E8F3F1",
-    fontWeight: "bold",
-    fontSize: "1.6em",
-  },
-}))

@@ -1,6 +1,6 @@
 import React from "react"
 import { Link as GatsbyLink } from "gatsby"
-import MuiLink from "@material-ui/core/Link"
+import MuiLink from "@mui/material/Link"
 
 // TODO: any대신 GatsbyLinkProps
 const Link = React.forwardRef<any, any>((props, ref) => (

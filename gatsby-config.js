@@ -44,6 +44,6 @@ module.exports = {
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
-    `gatsby-plugin-material-ui`,
+    `@iostindex/gatsby-plugin-material-ui`, // FIX: https://github.com/hupe1980/gatsby-plugin-material-ui/issues/110
   ],
 }

@@ -1,59 +1,27 @@
 import * as React from "react"
+import { styled } from "@mui/material/styles"
 import { PageProps, graphql } from "gatsby"
 import "prismjs/themes/prism-tomorrow.css"
-import { makeStyles } from "@material-ui/core/styles"
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 
-interface DataProps {
-  markdownRemark: {
-    html: string
-    frontmatter: {
-      title: string
-      description: string
-    }
-  }
+const PREFIX = "Post"
+
+const classes = {
+  post: `${PREFIX}-post`,
+  body: `${PREFIX}-body`,
 }
 
-const Post: React.FC<PageProps<DataProps>> = ({ data }) => {
-  const { title, description } = data.markdownRemark.frontmatter
-  const classes = useStyles()
-  return (
-    <Layout>
-      <Seo title={title} description={description} />
-      <div className={classes.post}>
-        <div
-          className={classes.body}
-          dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
-        />
-      </div>
-    </Layout>
-  )
-}
-
-export default Post
-
-export const query = graphql`
-  query($slug: String!) {
-    markdownRemark(frontmatter: { slug: { eq: $slug } }) {
-      html
-      frontmatter {
-        title
-        description
-      }
-    }
-  }
-`
-
-const useStyles = makeStyles(theme => ({
-  post: {
+const StyledLayout = styled(Layout)(({ theme }) => ({
+  [`& .${classes.post}`]: {
     [theme.breakpoints.up(680)]: {
       width: 680,
       margin: "auto",
     },
   },
-  body: {
+
+  [`& .${classes.body}`]: {
     color: "#222",
     "& a": {
       color: "#00B6D0",
@@ -132,3 +100,43 @@ const useStyles = makeStyles(theme => ({
     },
   },
 }))
+
+interface DataProps {
+  markdownRemark: {
+    html: string
+    frontmatter: {
+      title: string
+      description: string
+    }
+  }
+}
+
+const Post: React.FC<PageProps<DataProps>> = ({ data }) => {
+  const { title, description } = data.markdownRemark.frontmatter
+
+  return (
+    <StyledLayout>
+      <Seo title={title} description={description} />
+      <div className={classes.post}>
+        <div
+          className={classes.body}
+          dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
+        />
+      </div>
+    </StyledLayout>
+  )
+}
+
+export default Post
+
+export const query = graphql`
+  query($slug: String!) {
+    markdownRemark(frontmatter: { slug: { eq: $slug } }) {
+      html
+      frontmatter {
+        title
+        description
+      }
+    }
+  }
+`
