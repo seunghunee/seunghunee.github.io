@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: `신세상`,
+    title: `new_world`,
     description: `컴퓨터기술과 관련된 여러 정보와 생각을 글로 정리하는 곳`,
     author: `@HelloSeunghun`,
   },
@@ -32,8 +32,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `신세상`,
-        short_name: `신세상`,
+        name: `new_world`,
+        short_name: `new_world`,
         start_url: `/`,
         background_color: `#00C9B7`,
         theme_color: `#00C9B7`,
