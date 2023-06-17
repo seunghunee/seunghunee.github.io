@@ -1,7 +1,22 @@
-/**
- * Implement Gatsby's SSR (Server Side Rendering) APIs in this file.
- *
- * See: https://www.gatsbyjs.com/docs/ssr-apis/
- */
+import * as React from "react"
 
-// You can delete this file if you're not using it
+export const onRenderBody = ({ setHeadComponents }) => {
+  setHeadComponents([
+    <link
+      rel="preload"
+      href="/fonts/NanumBarunGothic.ttf"
+      as="font"
+      type="font/ttf"
+      crossOrigin="anonymous"
+      key="NanumBarunGothicFont"
+    />,
+    <link
+      rel="preload"
+      href="/fonts/UbuntuMono-Regular.ttf"
+      as="font"
+      type="font/ttf"
+      crossOrigin="anonymous"
+      key="UbuntuMonoFont"
+    />,
+  ])
+}
