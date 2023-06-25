@@ -69,17 +69,9 @@ fn f2() {
 
 물론 함수 내부에서 선언하게 되면 더 이상 전역적인 값은 아니게 된다.
 
-## 컴파일타임 초기화
+## 컴파일타임 초기화 강제
 
-Rust에서는 전역적인 값을 설정할 때는 반드시 초깃값을 명시해줘야 한다.
-그리고 이 때 [컴파일타임에 계산할 수 있는 것](https://doc.rust-lang.org/reference/const_eval.html)만 명시할 수 있다.
-[static initialization order fiasco](https://en.cppreference.com/w/cpp/language/siof)
-그리고 이 초기화는 컴파일 타임에 계산될 수 있는
-
-- https://doc.rust-lang.org/std/keyword.const.html#compile-time-constants
-- https://doc.rust-lang.org/reference/const_eval.html
-
-상수로만 가능.
+C++에서는 컴파일되는 과정에 따라서 전역적인 값을 초기화하는 코드보다 사용하는 코드가 먼저 실행되어 버리는 [경우](https://en.cppreference.com/w/cpp/language/siof)가 있었다. C++은 초기화되지 않은 전역 객체는 자동으로 0으로 초기화하기 때문에 매 컴파일마다 전역 객체의 값이 달라질 수 있고 여러 전역 객체들이 서로 의존하는 경우 문제는 더 심각해 진다. Rust는 전역 객체를 선언할 때 반드시 초깃값을 명시하도록 강제하여 이 문제를 해결한다. 그리고 이 초깃값은 [컴파일타임에 계산할 수 있는 값](https://doc.rust-lang.org/reference/const_eval.html)으로만 명시할 수 있다.
 
 ## 런타임 초기화
 
