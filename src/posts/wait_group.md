@@ -1,11 +1,11 @@
 ---
-slug: "/WaitGroup의-올바른-사용법"
-title: "WaitGroup의 올바른 사용법"
-description: "Go의 WaitGroup을 사용할 때 쉽게 실수할 수 있는 부분과 올바른 사용법에 대해"
+slug: "/바른-WaitGroup-사용법"
+title: "바른 WaitGroup 사용법"
+description: "Go의 WaitGroup을 사용할 때 저지를 수 있는 실수"
 tags: ["Go", "Goroutine", "WaitGroup", "Concurrency"]
 ---
 
-# `WaitGroup`의 올바른 사용법
+# 바른 `WaitGroup` 사용법
 
 간혹 여러 고루틴(goroutine)을 동시에 실행시키고, 이 고루틴들이 모두 종료될 때까지 기다리고 싶을 때가 있다.
 고루틴은 단순히 주어진 작업을 진행하고 끝나면 종료되는 하나의 루틴일 뿐이기에,
