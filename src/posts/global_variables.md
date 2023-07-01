@@ -68,18 +68,40 @@ Rust에서는 변수라 하더라도 `mut`키워드나 내부가변성(Interior 
 상수와 정적 변수를 이해했다면 전역 상수 혹은 전역 변수는 그리 어렵지 않다.
 그냥 상수나 정적 변수를 함수 바깥에 선언하면 된다.
 
-## 전역 상수와 전역 변수
+## 안전하게 값 바꾸기
 
-함수 바깥에 `const`로 상수를 선언하거나 `static`으로 정적 변수를 선언해서 _전역 상수_(_Global constant_)를 만들 수 있었다.
-이들은 어디까지나 상수로써 값이 한 번 선언된 후에는 바뀔 수 없다.
-그렇다면 값을 바꿀 수도 있는 전역 변수는 어떻게 만들 수 있을까?
+앞에서 단순한 대입문으로 정적 변수의 값을 변경하는 것이 안전하지 않다는 것을 알았다.
+정적 변수는 프로그램이 실행되고 끝날때 까지 존재하고,
+소유권의 관점에서 보면 `let`으로 선언된 변수처럼 단 하나의 소유자(Owner)가 존재하는 것이 아니다.
+사용되는 모든 곳에서 값을 읽고 쓸 수 있다.
+만약 프로그램이 멀티스레드로 작성되었다면 동시에 정적 변수에 접근하여 값을 변경하려고 하는 상황이 발생할 수 있다.
+그래서 컴파일러는 `static mut`으로 선언된 값이 스레드 안전(Thread safety)하지 않다고 에러를 내는 것이다.
+실제 스레드 안전하지 않은 자료구조로 정적 변수를 선언하면 다음과 같은 컴파일 에러를 볼 수 있다.
 
-즉, `static`만 쓸 수 있다.
-당연하게도 값이 변하지 않는 상수로는 선언할 수 없고, 정적 변수로만 선언 가능하다.
-단 const는 안된다.
-따라서 static에 적절한 내부가변성을 사용하면 OK
+```rust
+use std::cell::Cell; // `Cell`은 `Sync`를 구현하고 있지 않다
+
+static LOG_LEVEL: Cell<u8> = Cell::new(1); // error: `Cell<u8>` cannot be shared between threads safely
+```
+
+스레드 안전성을 지키면서 변수의 값을 바꿀 때는 적절한 동기화 장치(Synchronization primitive)를 이용해야 하는데, Rust는 표준 라이브러리 [`std::sync`](https://doc.rust-lang.org/std/sync/)에 마련되어 있다. 예를 들어 동기화 자료구조중 하나인 [`Mutex`](https://doc.rust-lang.org/std/sync/struct.Mutex.html)를 이용하면 정적 변수를 문제없이 선언할 수 있고, 자료구조가 제공하는 메소드를 이용하여 값을 안전하게 바꿀 수 있다.[^1]
+
+```rust
+use std::sync::Mutex; // `Mutex`는 `Sync`를 구현하고 있다
+
+static LOG_LEVEL: Mutex<u8> = Mutex::new(1);
+```
+
+그런데 사실 싱글 스레드에서도 정적변수는 안전하지 않다.
 
 ## 컴파일타임 초기화와 런타임 초기화
+
+Rust에서 `const`와 `static`으로 상수와 정적 변수를 선언할 때는 반드시 초깃값을 설정해 주어야 한다.
+
+```rust
+const PI: f64; // error: free constant item without body
+static E: f64; // error: free static item without body
+```
 
 C++에서는 컴파일되는 과정에 따라서 전역적인 값을 초기화하는 코드보다 사용하는 코드가 먼저 실행되어 버리는 [경우](https://en.cppreference.com/w/cpp/language/siof)가 있었다. C++은 초기화되지 않은 전역 객체는 자동으로 0으로 초기화하기 때문에 매 컴파일마다 전역 객체의 값이 달라질 수 있고 여러 전역 객체들이 서로 의존하는 경우 문제는 더 심각해 진다. Rust는 **전역 객체를 선언할 때 반드시 초깃값을 명시하도록 강제**하여 이 문제를 해결한다. 그리고 이 초깃값은 [컴파일타임에 계산할 수 있는 값](https://doc.rust-lang.org/reference/const_eval.html)으로만 명시할 수 있다.
 
@@ -89,3 +111,5 @@ C++에서는 컴파일되는 과정에 따라서 전역적인 값을 초기화�
 프로그램 시작시간은 프로그램이 시작될 때 알 수 있고, 데이터베이스 연결 정보는 연결한 후에야 알 수 있다.
 
 OnceCell, OnceLock
+
+[^1]: 예제에서는 `Cell`과의 비교를 위해 `Mutex`를 사용했지만 사실 `u8`과 같은 간단한 정수형은 [`std::sync::atomic`](https://doc.rust-lang.org/std/sync/atomic/index.html)에 선언된 원자형(Atomic type)를 사용하는 것이 더 효율적이다.
