@@ -86,9 +86,11 @@ lev_up(); // 함수 안에서 `LOG_LEVEL`의 값이 바뀌지 않는다고 컴�
 show_lev(); // 함수 안에서 `LOG_LEVEL`의 값이 바뀌지 않는다고 컴파일러가 확신할 수 없다!
 ```
 
-즉, **컴파일타임에 빌림 검사기(Borrow checker)를 적용할 수 없다**는 것이 첫번째 이유가 된다.
+즉, **빌림 검사기(Borrow checker)가 컴파일타임에 빌림 규칙(Borrowing rules)을 적용할 수 없다**는 것이 첫번째 이유가 된다.[^1]
 
-TODO: 싱글스레드 동시성문제와 빌림 검사기의 관계
+Rust에서 정적으로 빌림 규칙을 적용하지 못하는 변수에 대해서는 내부가변성을 이용하는데
+싱글스레드에선 런타임 빌림 검사기를 멀티스레드에선 다양한 동기화 장치들을 사용한다.
+따라서, 일반적으로 값이 변할 수 있는 가변 정적 변수를 안전하게 사용하려면, 컴파일러의 정적인 분석이 어려우므로 내부가변성(Interiror mutability)을 이용해야 하며, 여러 쓰레드로 부터의 경쟁 상태(Race condition)도 피해야 하므로 그 중에서도 적절한 동기화 장치가 마련된 것들을 사용해야 한다.
 
 두번째 이유는 여러 쓰레드에서 하나의 정적 변수에 동시에 접근하는 상황이 발생할 수 있기 때문이다.
 정적 변수는 임의의 장소에서 접근할 수 있기 때문에 프로그램이 멀티스레드로 작성되었다면 여러 쓰레드에서 동시에 접근할 수 있다.
@@ -101,15 +103,13 @@ use std::cell::Cell; // `Cell`은 `Sync`를 구현하고 있지 않다
 static LOG_LEVEL: Cell<u8> = Cell::new(1); // error: `Cell<u8>` cannot be shared between threads safely
 ```
 
-스레드 안전성을 지키면서 변수의 값을 바꿀 때는 적절한 동기화 장치(Synchronization primitive)를 이용해야 하는데, Rust는 표준 라이브러리 [`std::sync`](https://doc.rust-lang.org/std/sync/)에 마련되어 있다. 예를 들어 동기화 자료구조중 하나인 [`Mutex`](https://doc.rust-lang.org/std/sync/struct.Mutex.html)를 이용하면 정적 변수를 문제없이 선언할 수 있고, 자료구조가 제공하는 메소드를 이용하여 값을 안전하게 바꿀 수 있다.[^1][^2]
+스레드 안전성을 지키면서 변수의 값을 바꿀 때는 적절한 동기화 장치(Synchronization primitive)를 이용해야 하는데, Rust는 표준 라이브러리 [`std::sync`](https://doc.rust-lang.org/std/sync/)에 마련되어 있다. 예를 들어 동기화 자료구조중 하나인 [`Mutex`](https://doc.rust-lang.org/std/sync/struct.Mutex.html)를 이용하면 정적 변수를 문제없이 선언할 수 있고, 자료구조가 제공하는 메소드를 이용하여 값을 안전하게 바꿀 수 있다.[^2][^3]
 
 ```rust
 use std::sync::Mutex; // `Mutex`는 `Sync`를 구현하고 있다
 
 static LOG_LEVEL: Mutex<u8> = Mutex::new(1);
 ```
-
-따라서, 일반적으로 값이 변할 수 있는 가변 정적 변수를 안전하게 사용하려면, 컴파일러의 정적인 분석이 어려우므로 내부가변성(Interiror mutability)을 이용해야 하며, 여러 쓰레드로 부터의 경쟁 상태(Race condition)도 피해야 하므로 그 중에서도 적절한 동기화 장치가 마련된 것들을 사용해야 한다.
 
 ## 쓰레드 지역 저장소
 
@@ -146,8 +146,9 @@ Rust에서는 [`OnceCell`](https://doc.rust-lang.org/stable/std/cell/struct.Once
 값을 어떻게 저장할 것인지를 따져야 하고, 가변값인지 불변값인지 따져야 하고, 멀티쓰레드에서 접근 가능 하게 할지 하나의 쓰레드에서만 접근하게 할지를 따져야 하고, 초기값을 컴파일타임에 할당할 수 있는지 런타임에 할당 해야 하는지를 따져야 한다.
 여러가지 경우의 수를 따져가며 사용법을 익혀야 하지만 상세한 부분까지 프로그래머가 설정할 수 있고 안전하게 사용할 수 있도록 컴파일러가 안내해주는 것은 Rust의 장점이라 할 수 있다.
 
-[^1]: 예제에서는 `Cell`과의 비교를 위해 `Mutex`를 사용했지만 사실 `u8`과 같은 간단한 정수형은 [`std::sync::atomic`](https://doc.rust-lang.org/std/sync/atomic/index.html)에 선언된 원자형(Atomic type)를 사용하는 것이 더 효율적이다.
-[^2]:
+[^1]: 빌림 규칙을 적용하지 못한다는 말은, 작성하는 프로그램이 싱글스레드라고 하더라도 예를 들어 반복자 무효화(Iterator Invalidation)나 재진입성(Reentrancy)과 같은 싱글스레드 동시성 문제에서 자유롭지 못하다는 말이 된다. TODO: 싱글스레드 동시성문제에 대해 좀 더 확실히하기
+[^2]: 예제에서는 `Cell`과의 비교를 위해 `Mutex`를 사용했지만 사실 `u8`과 같은 간단한 정수형은 [`std::sync::atomic`](https://doc.rust-lang.org/std/sync/atomic/index.html)에 선언된 원자형(Atomic type)를 사용하는 것이 더 효율적이다.
+[^3]:
     단, 락(Lock)을 사용할 때는 항상 [포이즈닝](https://doc.rust-lang.org/std/sync/struct.RwLock.html#poisoning)과 [데드록](https://en.wikipedia.org/wiki/Deadlock)에 주의해야 한다.
     한 번 포이즈닝된 것은 다시 새로 만들어야 하니까 되도록 쓰기 잠금(Write lock)을 할 때는 panic이 일어나지 않도록 주의하여 프로그래밍 하자.
     그리고 잠금을 걸어야할 자원이 여러개 있을 경우 순서를 잘 생각하지 않으면 데드록에 걸리기 쉽다.
